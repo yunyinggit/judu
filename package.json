@@ -1,0 +1,7 @@
+{
+  "name": "judu-local",
+  "private": true,
+  "type": "module",
+  "scripts": {"start": "node server.mjs", "test": "node --test test/*.test.mjs", "build": "node build-local.mjs"},
+  "engines": {"node": ">=22"}
+}

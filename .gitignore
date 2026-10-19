@@ -1,4 +1,16 @@
 .DS_Store
+._*
+Thumbs.db
+node_modules/
+.env
+.env.*
+!.env.example
+.codex/
+.openai/
 .sites-runtime/
+coverage/
+*.log
+*.pid
+*.zip
 *.tar.gz
 *.tgz

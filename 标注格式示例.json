@@ -1,0 +1,61 @@
+{
+  "version": 2,
+  "documentText": "Reading notes\n\nThe report that you sent explains why the system failed.",
+  "analyses": [
+    {
+      "sentence": "The report that you sent explains why the system failed.",
+      "main": [
+        {
+          "text": "The report",
+          "role": "subject"
+        },
+        {
+          "text": "explains",
+          "role": "predicate"
+        },
+        {
+          "text": "why the system failed",
+          "role": "object"
+        }
+      ],
+      "clauses": [
+        {
+          "text": "that you sent",
+          "kind": "clause",
+          "label": "定语从句",
+          "relation": "修饰 report",
+          "parts": [
+            {
+              "text": "that",
+              "role": "object"
+            },
+            {
+              "text": "you",
+              "role": "subject"
+            },
+            {
+              "text": "sent",
+              "role": "predicate"
+            }
+          ]
+        },
+        {
+          "text": "why the system failed",
+          "kind": "clause",
+          "label": "宾语从句",
+          "relation": "作 explains 的宾语",
+          "parts": [
+            {
+              "text": "the system",
+              "role": "subject"
+            },
+            {
+              "text": "failed",
+              "role": "predicate"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
