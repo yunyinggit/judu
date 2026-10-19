@@ -1,0 +1,76 @@
+const f=(text,id,role,main=true)=>({text,id,role,main});
+const t=(text,role,label,id)=>({text,role,label,id});
+const d=(title,text,explanation)=>({title,text,explanation});
+export const examples=[
+{
+ sentence:'Good evaluations help teams ship AI agents more confidently.',
+ fragments:[f('Good evaluations','subject','subject'),f(' help','verb','predicate'),f(' teams','object','object'),f(' ship AI agents','complement','complement'),f(' more confidently.','adverb','modifier',false)],
+ translation:'好的评估能帮助团队更有信心地交付 AI 智能体。',
+ summary:'help + 人 + (to) do：帮助某人做某事。这里省略了 to。',
+ defaultDetail:'complement',
+ details:{subject:d('主语','Good evaluations','谁在发挥作用？Good evaluations（好的评估）。'),verb:d('谓语','help','主句的谓语是 help。'),object:d('宾语','teams','help 的宾语是 teams，即“帮助谁”。'),complement:d('宾语补足语 · 省略 to 的不定式','ship AI agents','说明团队被帮助去做什么。ship 是动词“交付、推出”，AI agents 是 ship 的宾语。主句不是三个并列谓语。'),adverb:d('方式状语','more confidently','修饰 ship，说明交付时“更有信心”。')},
+ tree:{id:'main',title:'主句 · 主谓宾 + 宾补',relation:'help somebody (to) do something',tokens:[t('Good evaluations','subject','主语','subject'),t('help','predicate','谓语','verb'),t('teams','object','宾语','object'),t('ship AI agents','complement','宾语补足语','complement')],note:'more confidently 是方式状语，补充说明 ship 的方式。',children:[]},
+ steps:[{title:'先找到主谓宾',text:'Good evaluations → help → teams',explanation:'好的评估 → 帮助 → 团队。',main:true},{title:'再读“帮助团队做什么”',text:'ship AI agents',explanation:'help 后的 teams 是 ship 的逻辑主语：团队交付 AI 智能体。',main:true},{title:'最后加上方式',text:'more confidently',explanation:'更有信心地。',main:false}]
+},
+{
+ sentence:'Without them, it’s easy to get stuck in reactive loops—catching issues only in production, where fixing one failure creates others.',
+ fragments:[f('Without them, ','without','modifier',false),f('it','subject','subject'),f('’s','verb','predicate'),f(' easy','complement','complement'),f(' to get stuck in reactive loops','real-subject','subject'),f('—catching issues only in production','catching','modifier',false),f(', where fixing one failure creates others.','where','modifier',false)],
+ translation:'没有这些评估，团队很容易陷入被动应对的循环：问题直到上线后才被发现，而在生产环境中，修好一个故障又会引出其他故障。',
+ summary:'破折号把“被动循环”展开说明；where 再补充生产环境中的情况。',
+ defaultDetail:'catching',
+ details:{
+ without:d('条件状语 · 没有它们的话','Without them','them 指上一句的 good evaluations。Without them 为整句设定条件：缺少这些评估时。'),
+ subject:d('形式主语','it','it 在这里不指某个东西，而是先占据主语位置。真正要说“很容易”的事情在后面的 to get stuck… 中。'),
+ verb:d('系动词','is（缩写为 ’s）','主句的谓语是系动词 is，与 easy 构成“是容易的”。catching 不是另一个主句谓语。'),
+ complement:d('表语','easy','easy 是形容词，作表语。结构是 it is + 形容词 + to do。'),
+ 'real-subject':d('真正的主语 · 不定式短语','to get stuck in reactive loops','整个不定式短语说明什么事情是容易的：陷入被动应对的循环。get stuck in… 意为“陷入……、被困在……中”。'),
+ catching:d('补充说明 · 现在分词短语','catching issues only in production','破折号后用 catching… 展开 reactive loops 的具体表现：“问题直到生产环境中才被发现”。它不是有完整主语的独立句。catching 的隐含施事是前文语境中的团队；issues 是其宾语，only in production 说明只在上线后才发现。'),
+ where:d('非限制性关系从句','where fixing one failure creates others','where 可理解为 in which，指向前面的 production，即生产环境（也可理解为前文描述的情境）。它补充说明：在那里，修复一个故障又会产生其他故障。'),
+ fixing:d('从句主语 · 动名词短语','fixing one failure','把“修复一个故障”这件事整体当作主语，所以谓语用第三人称单数 creates。one failure 是 fixing 的宾语。'),
+ creates:d('从句谓语','creates','产生、造成。主语是 fixing one failure 这件事。'),
+ others:d('从句宾语','others','指 other failures，即其他故障。')},
+ tree:{id:'main',title:'主句 · 形式主语结构',relation:'It is + 形容词 + to do',tokens:[t('it','subject','形式主语','subject'),t('is','predicate','系动词','verb'),t('easy','complement','表语','complement'),t('to get stuck in reactive loops','subject','真正的主语 · 不定式','real-subject')],note:'Without them 是句首条件状语：没有这些评估的话。',children:[{id:'catching',title:'补充说明 · 被动循环是什么？',relation:'破折号后展开 reactive loops',tokens:[t('catching','predicate','分词 · 非主句谓语','catching'),t('issues','object','分词的宾语','catching'),t('only in production','modifier','范围 / 地点状语','catching')],note:'问题直到上线后才被发现。',children:[{id:'where',title:'where 从句 · 在生产环境中',relation:'where ≈ in which',tokens:[t('fixing one failure','subject','从句主语 · 动名词短语','fixing'),t('creates','predicate','从句谓语','creates'),t('others','object','从句宾语','others')],note:'修好一个故障，却又引出其他故障。',children:[]}]}]},
+ steps:[{title:'先拿掉枝叶，找到主干',text:'It is easy to get stuck in reactive loops.',explanation:'很容易陷入被动应对的循环。it 是形式主语，后面的不定式才是“容易发生的事”。',main:true},{title:'补上发生的条件',text:'Without them, …',explanation:'没有这些评估的话。them 回指上一句的 evaluations。',main:false},{title:'破折号解释“这种循环是什么”',text:'—catching issues only in production',explanation:'直到上线后才发现问题。catching… 是补充说明，不是一个新的独立主句。',main:false},{title:'where 再往下一层展开',text:'where [fixing one failure] [creates] [others]',explanation:'在这样的生产环境中，修一个故障又会产生其他故障。方括号依次是从句的主语、谓语、宾语。',main:false}]
+},
+{
+ sentence:'Evals make problems and behavioral changes visible before they affect users, and their value compounds over the lifecycle of an agent.',
+ fragments:[f('Evals','subject','subject'),f(' make','verb','predicate'),f(' problems and behavioral changes','object','object'),f(' visible','complement','complement'),f(' before they affect users','before','modifier',false),f(', and ','and','unknown'),f('their value','subject2','subject'),f(' compounds','verb2','predicate'),f(' over the lifecycle of an agent.','time','modifier',false)],
+ translation:'评估能在问题和行为变化影响用户之前，让它们显现出来；评估的价值也会在智能体的整个生命周期中不断积累。',summary:'and 连接两个并列主句；before 从句只属于前一个主句。',defaultDetail:'before',
+ details:{subject:d('第一分句主语','Evals','evaluations 的简称，即评估。'),verb:d('第一分句谓语','make','这里采用 make + 宾语 + 形容词的结构。'),object:d('宾语','problems and behavioral changes','problems 与 behavioral changes 并列，整体作 make 的宾语。'),complement:d('宾语补足语','visible','表示使问题和行为变化变得“可见”。visible 描述宾语的状态。'),before:d('时间状语从句','before they affect users','before 表示“在……之前”。从句主语 they 指 problems and behavioral changes，谓语 affect，宾语 users。'),and:d('并列连词','and','连接两个完整分句。后面的 their value compounds… 不属于 before 从句。'),subject2:d('第二分句主语','their value','指评估的价值；their 回指 Evals。'),verb2:d('第二分句谓语','compounds','在这里作不及物动词，表示不断累积、产生复利效应。'),time:d('时间状语','over the lifecycle of an agent','在一个智能体的整个生命周期内。')},
+ tree:{id:'main',title:'主句 ① · 让问题可见',relation:'make + 宾语 + 宾补',tokens:[t('Evals','subject','主语','subject'),t('make','predicate','谓语','verb'),t('problems and behavioral changes','object','宾语','object'),t('visible','complement','宾语补足语','complement')],children:[{id:'before',title:'before · 时间状语从句',tokens:[t('they','subject','从句主语','before'),t('affect','predicate','从句谓语','before'),t('users','object','从句宾语','before')],note:'在它们影响用户之前。',children:[]},{id:'parallel',main:true,title:'and · 并列主句 ②',tokens:[t('their value','subject','主语','subject2'),t('compounds','predicate','谓语','verb2')],note:'over the lifecycle of an agent 补充时间范围。',children:[]}]},
+ steps:[{title:'第一句主干',text:'Evals → make → problems and behavioral changes → visible',explanation:'评估使问题和行为变化显现出来。',main:true},{title:'加上时间边界',text:'before they affect users',explanation:'在它们影响用户之前。',main:false},{title:'读 and 后的并列主句',text:'their value → compounds',explanation:'评估的价值不断积累。这里 compounds 不带宾语。',main:true},{title:'补上积累的时间跨度',text:'over the lifecycle of an agent',explanation:'贯穿智能体的整个生命周期。',main:false}]
+},
+{
+ sentence:'As we described in Building effective agents, agents operate over many turns: calling tools, modifying state, and adapting based on intermediate results.',
+ fragments:[f('As we described in Building effective agents, ','as','modifier',false),f('agents','subject','subject'),f(' operate','verb','predicate'),f(' over many turns','adverb','modifier',false),f(': calling tools, modifying state, and adapting based on intermediate results.','list','modifier',false)],
+ translation:'正如我们在《构建有效的智能体》中所描述的，智能体会通过多轮交互运行：调用工具、修改状态，并根据中间结果作出调整。',summary:'冒号后的三个 -ing 短语并列，解释智能体的运行活动。',defaultDetail:'list',
+ details:{as:d('as 引导的补充性从句','As we described in Building effective agents','意为“正如我们在……中所描述的”。we 是从句主语，described 是谓语。文章标题不是句子谓语。'),subject:d('主语','agents','谁在运行？智能体。'),verb:d('谓语','operate','运行、运作；这里不带宾语。'),adverb:d('范围状语','over many turns','跨越多个交互轮次。'),list:d('冒号后的并列分词短语','calling tools, modifying state, and adapting based on intermediate results','三个短语处于同一层级，逻辑主语都是 agents。calling 和 modifying 各带宾语；based on intermediate results 说明 adapting 的依据。')},
+ tree:{id:'main',title:'主句 · 主语 + 谓语',tokens:[t('agents','subject','主语','subject'),t('operate','predicate','谓语','verb'),t('over many turns','modifier','范围状语','adverb')],children:[{id:'as',title:'As… · 正如前文所述',tokens:[t('we','subject','从句主语','as'),t('described','predicate','从句谓语','as'),t('in Building effective agents','modifier','出处','as')],children:[]},{id:'list',title:'冒号展开 · 三个并列活动',tokens:[t('calling tools','modifier','① 调用工具','list'),t('modifying state','modifier','② 修改状态','list'),t('adapting based on intermediate results','modifier','③ 按中间结果调整','list')],children:[]}]},
+ steps:[{title:'主干很短',text:'agents → operate',explanation:'智能体运行。',main:true},{title:'交代轮次和前文出处',text:'As we described…, … over many turns',explanation:'前面的 as 从句引出已描述过的事实；over many turns 指运行跨越多个轮次。',main:false},{title:'冒号后读成三个平行动作',text:'calling / modifying / adapting',explanation:'调用、修改、调整；它们都解释 agents 如何运作。',main:false}]
+},
+{
+ sentence:'These same capabilities that make AI agents useful—autonomy, intelligence, and flexibility—also make them harder to evaluate.',
+ fragments:[f('These same capabilities','subject','subject'),f(' that make AI agents useful','that','modifier',false),f('—autonomy, intelligence, and flexibility—','apposition','modifier',false),f('also make','verb','predicate'),f(' them','object','object'),f(' harder to evaluate.','complement','complement')],
+ translation:'让 AI 智能体变得有用的这些能力——自主性、智能和灵活性——也让它们更难评估。',summary:'先跳过 that 从句与成对破折号，就能看到主干 capabilities make them harder to evaluate。',defaultDetail:'that',
+ details:{subject:d('主语','These same capabilities','These same capabilities 是主语中心部分；后接 that 从句修饰 capabilities。'),that:d('限制性关系从句 · 修饰 capabilities','that make AI agents useful','that 指 capabilities，在从句中作主语。make 是从句谓语，AI agents 是宾语，useful 是宾语补足语。'),apposition:d('同位补充 · 成对破折号','autonomy, intelligence, and flexibility','列举 capabilities 具体指什么：自主性、智能和灵活性。整个插入部分可以先跳过。'),verb:d('主句谓语','also make','第二个 make 才是主句谓语，also 表示“也”。'),object:d('主句宾语','them','them 指 AI agents，不是 capabilities。'),complement:d('宾语补足语','harder to evaluate','描述智能体“更难评估”。to evaluate 补充 harder 的含义，逻辑上被评估的是 them。')},
+ tree:{id:'main',title:'主句 · 同样的能力也增加评估难度',tokens:[t('These same capabilities','subject','主语中心部分','subject'),t('also make','predicate','主句谓语','verb'),t('them','object','宾语 · AI agents','object'),t('harder to evaluate','complement','宾语补足语','complement')],children:[{id:'that',title:'that 从句 · 什么样的能力？',relation:'修饰 capabilities',tokens:[t('that','subject','从句主语','that'),t('make','predicate','从句谓语','that'),t('AI agents','object','从句宾语','that'),t('useful','complement','宾语补足语','that')],children:[]},{id:'apposition',title:'破折号插入 · 能力的具体内容',tokens:[t('autonomy, intelligence, and flexibility','modifier','同位补充说明','apposition')],children:[]}]},
+ steps:[{title:'先读两个破折号外的主干',text:'These same capabilities → also make → them → harder to evaluate',explanation:'这些能力也让智能体更难评估。',main:true},{title:'that 从句回头修饰 capabilities',text:'that make AI agents useful',explanation:'让 AI 智能体有用的那些能力。注意从句和主句分别有一个 make。',main:false},{title:'插入语只是列举',text:'—autonomy, intelligence, and flexibility—',explanation:'自主性、智能和灵活性。它没有改变主干结构。',main:false}]
+},
+{
+ sentence:'Through our internal work and with customers at the frontier of agent development, we’ve learned how to design more rigorous and useful evals for agents.',
+ fragments:[f('Through our internal work and with customers at the frontier of agent development, ','context','modifier',false),f('we','subject','subject'),f('’ve learned','verb','predicate'),f(' how to design more rigorous and useful evals for agents.','object','object')],
+ translation:'通过内部工作，以及与处于智能体开发前沿的客户合作，我们学会了如何为智能体设计更严谨、更有用的评估。',summary:'长长的句首介词短语交代经验来源；主干是 we have learned how to design…。',defaultDetail:'object',
+ details:{context:d('句首状语 · 经验来源','Through our internal work and with customers at the frontier of agent development','Through our internal work 与 with customers… 共同交代学习经验的来源；at the frontier of agent development 修饰 customers，说明这些客户所处的领域位置。中文中的“合作”是根据语境补出的自然表达。'),subject:d('主语','we','我们。'),verb:d('谓语 · 现在完成时','have learned（缩写为 ’ve learned）','have + learned，强调已经取得的认识。'),object:d('宾语 · 疑问词 + 不定式','how to design more rigorous and useful evals for agents','整个 how to design… 是 learned 的宾语：“如何设计……”。design 的宾语是 evals；more rigorous and useful 修饰 evals；for agents 表示评估面向智能体。')},
+ tree:{id:'main',title:'主句 · 我们学会了什么',tokens:[t('we','subject','主语','subject'),t('have learned','predicate','谓语 · 现在完成时','verb'),t('how to design … evals for agents','object','宾语 · 疑问词 + 不定式','object')],children:[{id:'context',title:'句首状语 · 从哪些经历中学到',tokens:[t('Through our internal work','modifier','通过内部工作','context'),t('with customers …','modifier','与前沿客户一起','context')],children:[]},{id:'design',title:'展开 how to design…',tokens:[t('design','predicate','不定式中的动词','object'),t('more rigorous and useful evals','object','design 的宾语','object'),t('for agents','modifier','适用对象','object')],children:[]}]},
+ steps:[{title:'先越过句首逗号',text:'we → have learned → how to design…',explanation:'我们学会了如何设计……。',main:true},{title:'读清楚设计的对象',text:'more rigorous and useful evals for agents',explanation:'面向智能体的、更严谨且更有用的评估。',main:true},{title:'最后回看经验来源',text:'Through our internal work and with customers…',explanation:'从内部实践以及与前沿客户的工作中总结经验。',main:false}]
+},
+{
+ sentence:"Here's what's worked across a range of agent architectures and use cases in real-world deployment.",
+ fragments:[f("Here's ",'here','predicate'),f("what's worked",'what','subject'),f(' across a range of agent architectures and use cases','across','modifier',false),f(' in real-world deployment.','deployment','modifier',false)],
+ translation:'下面这些做法，在真实部署中的多种智能体架构和使用场景下都取得了效果。',summary:'Here is… 是引出内容的表达；what’s worked 中的 ’s 是 has，worked 表示“奏效”。',defaultDetail:'what',
+ details:{here:d('引出下文 · Here is…',"Here's",'这里的 ’s 是 is。“Here is + 名词性成分”用于介绍接下来的内容。'),what:d('融合关系从句 · 名词性成分',"what's worked",'what 相当于“那些奏效的做法 / the things that”。在整体上，它是 Here is… 后引出的名词性成分（传统分析为倒装句的主语）；从句内部 what 是主语，has worked 是谓语。这里 ’s 是 has，与前面的 Here’s 中的 is 不同。'),across:d('范围状语','across a range of agent architectures and use cases','在多种智能体架构和使用场景中。agent architectures 与 use cases 并列。'),deployment:d('语境 / 场景状语','in real-world deployment','在真实部署中，说明这些经验来自实际使用场景。')},
+ tree:{id:'main',title:'引出下文 · Here is…',tokens:[t('Here','modifier','引出内容','here'),t('is','predicate','系动词','here'),t('what has worked …','subject','名词性成分 · 主语','what')],children:[{id:'what',title:'展开 what 从句 · 什么奏效了？',tokens:[t('what','subject','从句主语','what'),t('has worked','predicate','从句谓语 · 现在完成时','what')],note:'worked 在这里是“奏效”，不是“工作过”。',children:[]},{id:'range',title:'补充适用范围和实践场景',tokens:[t('across a range of agent architectures and use cases','modifier','范围','across'),t('in real-world deployment','modifier','实际部署场景','deployment')],children:[]}]},
+ steps:[{title:'识别引出内容的句式',text:'Here is [what has worked …].',explanation:'下面是那些已经奏效的做法。两个 ’s 分别是 is 和 has。',main:true},{title:'看清 what 的作用',text:'what → has worked',explanation:'what 将“奏效的东西”整体名词化，可以理解为“有效做法”。',main:true},{title:'补上范围与场景',text:'across … / in real-world deployment',explanation:'在多种智能体架构、使用场景和真实部署中。',main:false}]
+}
+];
+export const exampleText=examples.map(e=>e.sentence).join('\n\n');
